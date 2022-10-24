@@ -1,8 +1,13 @@
 package com.bebetto.financemanager.dao;
 
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
-@Repository
-public class ExpensesDao {
+import com.bebetto.financemanager.pojo.Expense;
+
+public interface ExpensesDao {
+
+	Expense getExpense(final int expenseId);
+
+	List<Expense> getExpenses();
 
 }

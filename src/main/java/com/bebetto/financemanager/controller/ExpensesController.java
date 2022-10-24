@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,19 +26,21 @@ public class ExpensesController {
 		this.expensesService = expensesService;
 	}
 
-	@GetMapping(value = "/v1/expenses")
-	public ResponseEntity<Response<Map<String, Object>>> getExpenses() {
+	@GetMapping(value = "/v1/expenses/{expenseId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Response<Map<String, Object>>> getExpense(@PathVariable("expenseId") final int expenseId) {
 		final Map<String, Object> data = new HashMap<>();
-		data.put("expenses", expensesService.getExpenses());
-		final Response<Map<String, Object>> response = new Response<>(200, "Request processed successfully...!", data);
+		data.put("expense", this.expensesService.getExpense(expenseId));
+		final Response<Map<String, Object>> response = new Response<>(HttpStatus.OK.value(), Response.DEFAULT_MESSAGE,
+				data);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/v1/expenses/{expenseId}")
-	public ResponseEntity<Response<Map<String, Object>>> getExpense(@PathVariable("expenseId") int expenseId) {
+	@GetMapping(value = "/v1/expenses", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Response<Map<String, Object>>> getExpenses() {
 		final Map<String, Object> data = new HashMap<>();
-		data.put("expense", expensesService.getExpense());
-		final Response<Map<String, Object>> response = new Response<>(200, "Request processed successfully...!", data);
+		data.put("expenses", this.expensesService.getExpenses());
+		final Response<Map<String, Object>> response = new Response<>(HttpStatus.OK.value(), Response.DEFAULT_MESSAGE,
+				data);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

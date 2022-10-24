@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 
 public class Response<T> {
 
+	public static final String DEFAULT_MESSAGE = "Request processed successfully...!";
+
 	private int status;
 	private String message;
 	private T data;
@@ -20,7 +22,7 @@ public class Response<T> {
 		this.message = message;
 		this.data = data;
 		final ZonedDateTime zonedDateTime = ZonedDateTime.now();
-		timeStamp = zonedDateTime.format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
+		this.timeStamp = zonedDateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 	}
 
 	public T getData() {
