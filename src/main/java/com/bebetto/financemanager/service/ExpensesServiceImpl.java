@@ -22,6 +22,22 @@ public class ExpensesServiceImpl implements ExpensesService {
 
 	@Override
 	@Transactional(rollbackFor = { Exception.class })
+	public int createExpense(final Expense expense) {
+		return this.expensesDao.createExpense(expense);
+	}
+
+	@Override
+	@Transactional(rollbackFor = { Exception.class })
+	public void deleteExpense(final int expenseId) {
+		final Expense expense = this.expensesDao.getExpense(expenseId);
+		if (expense == null) {
+			throw new ExpenseNotFoundException("Expense not found...!");
+		}
+		this.expensesDao.deleteExpense(expenseId);
+	}
+
+	@Override
+	@Transactional(rollbackFor = { Exception.class })
 	public Expense getExpense(final int expenseId) {
 		final Expense expense = this.expensesDao.getExpense(expenseId);
 		if (expense == null) {
@@ -34,6 +50,16 @@ public class ExpensesServiceImpl implements ExpensesService {
 	@Transactional(rollbackFor = { Exception.class })
 	public List<Expense> getExpenses() {
 		return this.expensesDao.getExpenses();
+	}
+
+	@Override
+	@Transactional(rollbackFor = { Exception.class })
+	public void updateExpense(final Expense expense) {
+		final Expense expenseDb = this.expensesDao.getExpense(expense.getId());
+		if (expenseDb == null) {
+			throw new ExpenseNotFoundException("Expense not found...!");
+		}
+		this.expensesDao.updateExpense(expense);
 	}
 
 }
