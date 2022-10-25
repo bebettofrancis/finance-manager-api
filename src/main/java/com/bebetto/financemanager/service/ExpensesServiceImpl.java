@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bebetto.financemanager.dao.ExpensesDao;
 import com.bebetto.financemanager.exception.ExpenseNotFoundException;
@@ -20,6 +21,7 @@ public class ExpensesServiceImpl implements ExpensesService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = { Exception.class })
 	public Expense getExpense(final int expenseId) {
 		final Expense expense = this.expensesDao.getExpense(expenseId);
 		if (expense == null) {
@@ -29,6 +31,7 @@ public class ExpensesServiceImpl implements ExpensesService {
 	}
 
 	@Override
+	@Transactional(rollbackFor = { Exception.class })
 	public List<Expense> getExpenses() {
 		return this.expensesDao.getExpenses();
 	}
