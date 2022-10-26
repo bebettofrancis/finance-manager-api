@@ -41,8 +41,8 @@ public class ExpensesController {
 		final HttpStatus httpStatus = HttpStatus.CREATED;
 		final Map<String, Object> data = new HashMap<>();
 		data.put("expenseId", this.expensesService.createExpense(expense));
-		final Response<Map<String, Object>> response = new Response<>(httpStatus.value(), Response.DEFAULT_SUCCESS_MESSAGE,
-				data);
+		final Response<Map<String, Object>> response = new Response.ResponseBuilder<Map<String, Object>>()
+				.setStatus(httpStatus.value()).setMessage(Response.DEFAULT_SUCCESS_MESSAGE).setData(data).build();
 		return new ResponseEntity<>(response, httpStatus);
 	}
 
@@ -60,8 +60,8 @@ public class ExpensesController {
 		final HttpStatus httpStatus = HttpStatus.OK;
 		final Map<String, Object> data = new HashMap<>();
 		data.put("expense", this.expensesService.getExpense(expenseId));
-		final Response<Map<String, Object>> response = new Response<>(httpStatus.value(), Response.DEFAULT_SUCCESS_MESSAGE,
-				data);
+		final Response<Map<String, Object>> response = new Response.ResponseBuilder<Map<String, Object>>()
+				.setStatus(httpStatus.value()).setMessage(Response.DEFAULT_SUCCESS_MESSAGE).setData(data).build();
 		return new ResponseEntity<>(response, httpStatus);
 	}
 
@@ -70,8 +70,8 @@ public class ExpensesController {
 		final HttpStatus httpStatus = HttpStatus.OK;
 		final Map<String, Object> data = new HashMap<>();
 		data.put("expenses", this.expensesService.getExpenses());
-		final Response<Map<String, Object>> response = new Response<>(httpStatus.value(), Response.DEFAULT_SUCCESS_MESSAGE,
-				data);
+		final Response<Map<String, Object>> response = new Response.ResponseBuilder<Map<String, Object>>()
+				.setStatus(httpStatus.value()).setMessage(Response.DEFAULT_SUCCESS_MESSAGE).setData(data).build();
 		return new ResponseEntity<>(response, httpStatus);
 	}
 

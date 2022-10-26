@@ -2,6 +2,8 @@ package com.bebetto.financemanager.exception.handler;
 
 import java.util.Map;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,6 +13,7 @@ import org.springframework.web.context.request.WebRequest;
 import com.bebetto.financemanager.response.Response;
 
 @ControllerAdvice
+@Order(Ordered.LOWEST_PRECEDENCE)
 public class GenericExceptionHandler {
 
 	@ExceptionHandler(value = { Exception.class })
@@ -22,7 +25,8 @@ public class GenericExceptionHandler {
 		if (message == null) {
 			message = Response.DEFAULT_ERROR_MESSAGE;
 		}
-		final Response<Map<String, Object>> response = new Response<>(httpStatus.value(), message, null);
+		final Response<Map<String, Object>> response = new Response.ResponseBuilder<Map<String, Object>>()
+				.setStatus(httpStatus.value()).setMessage(message).build();
 		return new ResponseEntity<>(response, httpStatus);
 	}
 
