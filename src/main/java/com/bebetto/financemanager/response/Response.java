@@ -6,7 +6,8 @@ import java.util.List;
 
 public class Response<T> {
 
-	public static final String DEFAULT_MESSAGE = "Request processed successfully...!";
+	public static final String DEFAULT_ERROR_MESSAGE = "Something went wrong...!";
+	public static final String DEFAULT_SUCCESS_MESSAGE = "Request processed successfully...!";
 
 	private int status;
 	private String message;

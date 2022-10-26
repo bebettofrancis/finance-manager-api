@@ -1,9 +1,17 @@
 package com.bebetto.financemanager.pojo;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
+
 public class Expense {
 
+	@Min(0)
 	private int id;
+
+	@Min(0)
 	private int categoryId;
+
+	@Size(max = 200, message = "Field length cannot be greater tha 200 characters...!")
 	private String comment;
 
 	public Expense() {
