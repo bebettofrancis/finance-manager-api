@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+import com.bebetto.financemanager.logger.LoggingManager;
 import com.bebetto.financemanager.response.Response;
 
 @ControllerAdvice
@@ -19,7 +20,7 @@ public class GenericExceptionHandler {
 	@ExceptionHandler(value = { Exception.class })
 	public ResponseEntity<Response<Map<String, Object>>> handleException(final Exception exc,
 			final WebRequest request) {
-		exc.printStackTrace();
+		LoggingManager.error(request, exc);
 		final HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
 		String message = exc.getMessage();
 		if (message == null) {
