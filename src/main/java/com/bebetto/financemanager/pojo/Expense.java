@@ -42,4 +42,10 @@ public class Expense {
 		this.id = id;
 	}
 
+	@Override
+	public String toString() {
+		return "Expense [getCategoryId()=" + getCategoryId() + ", getComment()=" + getComment() + ", getId()=" + getId()
+				+ "]";
+	}
+
 }

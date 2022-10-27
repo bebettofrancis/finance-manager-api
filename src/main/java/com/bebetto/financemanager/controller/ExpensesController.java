@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bebetto.financemanager.logger.LoggingManager;
 import com.bebetto.financemanager.pojo.Expense;
 import com.bebetto.financemanager.response.Response;
 import com.bebetto.financemanager.service.ExpensesService;
@@ -38,6 +39,7 @@ public class ExpensesController {
 
 	@PostMapping(value = "/v1/expenses", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response<Map<String, Object>>> createExpense(@Valid @RequestBody final Expense expense) {
+		LoggingManager.info("#####RequestBody#####", expense);
 		final HttpStatus httpStatus = HttpStatus.CREATED;
 		final Map<String, Object> data = new HashMap<>();
 		data.put("expenseId", this.expensesService.createExpense(expense));

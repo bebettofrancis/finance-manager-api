@@ -23,6 +23,10 @@ public class LoggingManager {
 		LOGGER.info("{}", value);
 	}
 
+	public static void info(final Object value1, final Object value2) {
+		LOGGER.info("{} {}", value1, value2);
+	}
+
 	public static void trace(final Object value) {
 		LOGGER.trace("{}", value);
 	}
