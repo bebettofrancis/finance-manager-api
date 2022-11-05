@@ -20,7 +20,7 @@ public class Expense {
 	@Size(max = 200, message = "Field length cannot be greater tha 200 characters...!")
 	private String comment;
 
-	@DateConstraint(pattern = VALID_DATE_FORMAT)
+	@DateConstraint(pattern = VALID_DATE_FORMAT, dateRangeValidate = true, minDate = 100L, maxDate = 100L)
 	private String date;
 
 	public Expense() {

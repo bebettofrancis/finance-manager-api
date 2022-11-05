@@ -15,6 +15,8 @@ import javax.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DateConstraint {
 
+	boolean dateRangeValidate() default false;
+
 	Class<?>[] groups() default {};
 
 	long maxDate() default 0;
@@ -26,7 +28,5 @@ public @interface DateConstraint {
 	String pattern();
 
 	Class<? extends Payload>[] payload() default {};
-
-	boolean validateDateRange() default false;
 
 }

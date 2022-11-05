@@ -14,14 +14,14 @@ public class DateValidator implements ConstraintValidator<DateConstraint, String
 	private String pattern;
 	private LocalDate maxDate;
 	private LocalDate minDate;
-	private boolean validateDateRange;
+	private boolean dateRangeValidate;
 
 	@Override
 	public void initialize(final DateConstraint dateConstraint) {
 		this.pattern = dateConstraint.pattern();
 		this.maxDate = LocalDate.now().plusDays(dateConstraint.maxDate());
-		this.minDate = LocalDate.now().plusDays(dateConstraint.minDate());
-		this.validateDateRange = dateConstraint.validateDateRange();
+		this.minDate = LocalDate.now().minusDays(dateConstraint.minDate());
+		this.dateRangeValidate = dateConstraint.dateRangeValidate();
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class DateValidator implements ConstraintValidator<DateConstraint, String
 		try {
 			final LocalDate localDate = LocalDate.parse(value, DateTimeFormatter.ofPattern(this.pattern));
 			LoggingManager.info("Expense date", localDate);
-			if (!this.validateDateRange || (!localDate.isBefore(this.minDate) && !localDate.isAfter(this.maxDate))) {
+			if (!this.dateRangeValidate || (!localDate.isBefore(this.minDate) && !localDate.isAfter(this.maxDate))) {
 				validDate = true;
 			}
 		} catch (final DateTimeParseException exc) {
