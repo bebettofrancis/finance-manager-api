@@ -3,7 +3,13 @@ package com.bebetto.financemanager.pojo;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
+import com.bebetto.financemanager.validator.DateConstraint;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Expense {
+
+	private static final String VALID_DATE_FORMAT = "yyyy-MM-dd";
 
 	@Min(0)
 	private int id;
@@ -13,6 +19,9 @@ public class Expense {
 
 	@Size(max = 200, message = "Field length cannot be greater tha 200 characters...!")
 	private String comment;
+
+	@DateConstraint(pattern = VALID_DATE_FORMAT)
+	private String date;
 
 	public Expense() {
 		super();
@@ -26,6 +35,10 @@ public class Expense {
 		return this.comment;
 	}
 
+	public String getDate() {
+		return this.date;
+	}
+
 	public int getId() {
 		return this.id;
 	}
@@ -36,6 +49,10 @@ public class Expense {
 
 	public void setComment(final String comment) {
 		this.comment = comment;
+	}
+
+	public void setDate(final String date) {
+		this.date = date;
 	}
 
 	public void setId(final int id) {

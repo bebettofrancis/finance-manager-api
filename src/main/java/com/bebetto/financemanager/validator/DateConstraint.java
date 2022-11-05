@@ -11,14 +11,22 @@ import javax.validation.Payload;
 
 @Documented
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER })
-@Constraint(validatedBy = ExpenseIdValidator.class)
+@Constraint(validatedBy = DateValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ExpenseIdConstraint {
+public @interface DateConstraint {
 
 	Class<?>[] groups() default {};
 
-	String message() default "Invalid expense id...!";
+	long maxDate() default 0;
+
+	String message() default "Invalid date/time format...!";
+
+	long minDate() default 0;
+
+	String pattern();
 
 	Class<? extends Payload>[] payload() default {};
+
+	boolean validateDateRange() default false;
 
 }

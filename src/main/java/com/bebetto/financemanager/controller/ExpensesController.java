@@ -23,7 +23,6 @@ import com.bebetto.financemanager.logger.LoggingManager;
 import com.bebetto.financemanager.pojo.Expense;
 import com.bebetto.financemanager.response.Response;
 import com.bebetto.financemanager.service.ExpensesService;
-import com.bebetto.financemanager.validator.ExpenseIdConstraint;
 
 @RestController
 @RequestMapping("/api")
@@ -49,16 +48,14 @@ public class ExpensesController {
 	}
 
 	@DeleteMapping(value = "/v1/expenses/{expenseId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Response<Map<String, Object>>> deleteExpense(
-			@PathVariable("expenseId") @ExpenseIdConstraint final int expenseId) {
+	public ResponseEntity<Response<Map<String, Object>>> deleteExpense(@PathVariable("expenseId") final int expenseId) {
 		final HttpStatus httpStatus = HttpStatus.NO_CONTENT;
 		this.expensesService.deleteExpense(expenseId);
 		return new ResponseEntity<>(httpStatus);
 	}
 
 	@GetMapping(value = "/v1/expenses/{expenseId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Response<Map<String, Object>>> getExpense(
-			@PathVariable("expenseId") @ExpenseIdConstraint final int expenseId) {
+	public ResponseEntity<Response<Map<String, Object>>> getExpense(@PathVariable("expenseId") final int expenseId) {
 		final HttpStatus httpStatus = HttpStatus.OK;
 		final Map<String, Object> data = new HashMap<>();
 		data.put("expense", this.expensesService.getExpense(expenseId));
