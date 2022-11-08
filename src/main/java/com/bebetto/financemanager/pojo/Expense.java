@@ -1,6 +1,9 @@
 package com.bebetto.financemanager.pojo;
 
+import java.math.BigDecimal;
+
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.bebetto.financemanager.validator.DateConstraint;
@@ -23,8 +26,15 @@ public class Expense {
 	@DateConstraint(pattern = VALID_DATE_FORMAT, dateRangeValidate = true, minDate = 100L, maxDate = 100L)
 	private String date;
 
+	@NotNull(message = "Amount cannot be null...")
+	private BigDecimal amount;
+
 	public Expense() {
 		super();
+	}
+
+	public BigDecimal getAmount() {
+		return this.amount;
 	}
 
 	public int getCategoryId() {
@@ -41,6 +51,10 @@ public class Expense {
 
 	public int getId() {
 		return this.id;
+	}
+
+	public void setAmount(final BigDecimal amount) {
+		this.amount = amount;
 	}
 
 	public void setCategoryId(final int categoryId) {

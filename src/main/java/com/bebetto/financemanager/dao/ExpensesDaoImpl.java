@@ -19,11 +19,12 @@ import com.bebetto.financemanager.pojo.Expense;
 @Repository
 public class ExpensesDaoImpl implements ExpensesDao {
 
-	private static final String INSERT_EXPENSE = "INSERT INTO EXPENSE (CATEGORY_ID,COMMENT) VALUES (:categoryId,:comment)";
-	private static final String GET_EXPENSE = "SELECT ID,CATEGORY_ID,COMMENT FROM EXPENSE WHERE ID=:expenseId";
-	private static final String GET_EXPENSES = "SELECT ID,CATEGORY_ID,COMMENT FROM EXPENSE";
+	private static final String INSERT_EXPENSE = "INSERT INTO EXPENSE (CATEGORY_ID,COMMENT,AMOUNT,EXPENSE_DATE) VALUES (:categoryId,:comment,:amount,:expenseDate)";
+	private static final String GET_EXPENSE = "SELECT ID,CATEGORY_ID,COMMENT,AMOUNT,EXPENSE_DATE FROM EXPENSE WHERE ID=:expenseId";
+	private static final String GET_EXPENSES = "SELECT ID,CATEGORY_ID,COMMENT,AMOUNT,EXPENSE_DATE FROM EXPENSE";
 	private static final String DELETE_EXPENSE = "DELETE FROM EXPENSE WHERE ID=:expenseId";
 	private static final String UPDATE_EXPENSE = "UPDATE EXPENSE SET CATEGORY_ID=:categoryId,COMMENT=:comment WHERE ID=:expenseId";
+	private static final String EXPENSE_ID = "expenseId";
 
 	private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -35,7 +36,8 @@ public class ExpensesDaoImpl implements ExpensesDao {
 	@Override
 	public int createExpense(final Expense expense) {
 		final SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
-				.addValue("categoryId", expense.getCategoryId()).addValue("comment", expense.getComment());
+				.addValue("categoryId", expense.getCategoryId()).addValue("comment", expense.getComment())
+				.addValue("amount", expense.getAmount()).addValue("expenseDate", expense.getDate());
 		final KeyHolder keyHolder = new GeneratedKeyHolder();
 		this.namedParameterJdbcTemplate.update(INSERT_EXPENSE, sqlParameterSource, keyHolder);
 		return (int) keyHolder.getKey();
@@ -43,7 +45,7 @@ public class ExpensesDaoImpl implements ExpensesDao {
 
 	@Override
 	public boolean deleteExpense(final int expenseId) {
-		final SqlParameterSource sqlParameterSource = new MapSqlParameterSource().addValue("expenseId", expenseId);
+		final SqlParameterSource sqlParameterSource = new MapSqlParameterSource().addValue(EXPENSE_ID, expenseId);
 		final int deletedRows = this.namedParameterJdbcTemplate.update(DELETE_EXPENSE, sqlParameterSource);
 		return deletedRows > 0;
 	}
@@ -53,12 +55,14 @@ public class ExpensesDaoImpl implements ExpensesDao {
 		expense.setId(rs.getInt("ID"));
 		expense.setCategoryId(rs.getInt("CATEGORY_ID"));
 		expense.setComment(rs.getString("COMMENT"));
+		expense.setAmount(rs.getBigDecimal("AMOUNT"));
+		expense.setDate(rs.getString("EXPENSE_DATE"));
 		return expense;
 	}
 
 	@Override
 	public Expense getExpense(final int expenseId) {
-		final SqlParameterSource sqlParameterSource = new MapSqlParameterSource().addValue("expenseId", expenseId);
+		final SqlParameterSource sqlParameterSource = new MapSqlParameterSource().addValue(EXPENSE_ID, expenseId);
 		return this.namedParameterJdbcTemplate.query(GET_EXPENSE, sqlParameterSource,
 				(ResultSetExtractor<Expense>) rs -> {
 					Expense expense = null;
@@ -90,7 +94,7 @@ public class ExpensesDaoImpl implements ExpensesDao {
 	public boolean updateExpense(final Expense expense) {
 		final SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
 				.addValue("categoryId", expense.getCategoryId()).addValue("comment", expense.getComment())
-				.addValue("expenseId", expense.getId());
+				.addValue(EXPENSE_ID, expense.getId());
 		final int updatedRows = this.namedParameterJdbcTemplate.update(UPDATE_EXPENSE, sqlParameterSource);
 		return updatedRows > 0;
 	}

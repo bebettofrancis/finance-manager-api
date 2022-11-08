@@ -1,11 +1,15 @@
 package com.bebetto.financemanager.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -70,6 +74,18 @@ public class ExpensesController {
 		final Response<Map<String, Object>> response = new Response.ResponseBuilder<Map<String, Object>>()
 				.setStatus(httpStatus.value()).setMessage(Response.DEFAULT_SUCCESS_MESSAGE).setData(data).build();
 		return new ResponseEntity<>(response, httpStatus);
+	}
+
+	@GetMapping(value = "/v1/expenses/export", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ByteArrayResource> getExportedExpenses() throws IOException {
+		final HttpStatus httpStatus = HttpStatus.OK;
+		final ByteArrayResource byteArrayResource = this.expensesService.getExpensesToExport();
+		final HttpHeaders headers = new HttpHeaders();
+		headers.setContentDisposition(
+				ContentDisposition.attachment().filename(byteArrayResource.getFilename()).build());
+		headers.setContentType(MediaType.parseMediaType(MediaType.APPLICATION_OCTET_STREAM_VALUE));
+		headers.setContentLength(byteArrayResource.contentLength());
+		return new ResponseEntity<>(byteArrayResource, headers, httpStatus);
 	}
 
 	@PutMapping(value = "/v1/expenses", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -1,5 +1,6 @@
 package com.bebetto.financemanager.exception.handler;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -26,10 +27,9 @@ public class MethodArgumentNotValidExceptionHandler {
 		if (fieldErrors == null) {
 			return Collections.emptyList();
 		}
-		return fieldErrors.stream().map(fieldError -> {
-			return "Field name: ['" + fieldError.getField() + "'], Rejected value: ['" + fieldError.getRejectedValue()
-					+ "']";
-		}).collect(Collectors.toList());
+		return fieldErrors.stream().map(fieldError -> "Field name: ['" + fieldError.getField()
+				+ "'], Rejected value: ['" + fieldError.getRejectedValue() + "']")
+				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	@ExceptionHandler(value = { MethodArgumentNotValidException.class })
