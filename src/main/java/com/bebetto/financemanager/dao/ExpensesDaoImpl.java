@@ -19,11 +19,13 @@ import com.bebetto.financemanager.pojo.Expense;
 @Repository
 public class ExpensesDaoImpl implements ExpensesDao {
 
-	private static final String INSERT_EXPENSE = "INSERT INTO EXPENSE (CATEGORY_ID,COMMENT,AMOUNT,EXPENSE_DATE) VALUES (:categoryId,:comment,:amount,:expenseDate)";
+	private static final String INSERT_EXPENSE = "INSERT INTO EXPENSE (CATEGORY_ID,COMMENT,AMOUNT,EXPENSE_DATE) VALUES\n"
+			+ "(:categoryId,:comment,:amount,:expenseDate)";
 	private static final String GET_EXPENSE = "SELECT ID,CATEGORY_ID,COMMENT,AMOUNT,EXPENSE_DATE FROM EXPENSE WHERE ID=:expenseId";
 	private static final String GET_EXPENSES = "SELECT ID,CATEGORY_ID,COMMENT,AMOUNT,EXPENSE_DATE FROM EXPENSE";
 	private static final String DELETE_EXPENSE = "DELETE FROM EXPENSE WHERE ID=:expenseId";
-	private static final String UPDATE_EXPENSE = "UPDATE EXPENSE SET CATEGORY_ID=:categoryId,COMMENT=:comment WHERE ID=:expenseId";
+	private static final String UPDATE_EXPENSE = "UPDATE EXPENSE SET CATEGORY_ID=:categoryId,COMMENT=:comment\n"
+			+ "WHERE ID=:expenseId";
 	private static final String EXPENSE_ID = "expenseId";
 
 	private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;

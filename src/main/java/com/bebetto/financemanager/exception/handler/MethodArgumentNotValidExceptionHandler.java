@@ -35,7 +35,7 @@ public class MethodArgumentNotValidExceptionHandler {
 	@ExceptionHandler(value = { MethodArgumentNotValidException.class })
 	public ResponseEntity<Response<Map<String, Object>>> handleException(final MethodArgumentNotValidException exc,
 			final WebRequest request) {
-		LoggingManager.error(request, exc);
+		LoggingManager.warn(request, exc);
 		final HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
 		final List<String> errors = getErrors(exc.getFieldErrors());
 		final String message = exc.getMessage();

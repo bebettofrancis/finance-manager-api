@@ -35,6 +35,10 @@ public class LoggingManager {
 		LOGGER.warn("{}", value);
 	}
 
+	public static void warn(final Object value, final Throwable t) {
+		LOGGER.warn("{}", value, t);
+	}
+
 	private LoggingManager() {
 		super();
 	}

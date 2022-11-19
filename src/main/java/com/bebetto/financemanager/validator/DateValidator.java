@@ -33,7 +33,7 @@ public class DateValidator implements ConstraintValidator<DateConstraint, String
 			if (!this.dateRangeValidate || (!localDate.isBefore(this.minDate) && !localDate.isAfter(this.maxDate))) {
 				validDate = true;
 			}
-		} catch (final DateTimeParseException exc) {
+		} catch (final NullPointerException | DateTimeParseException exc) {
 			LoggingManager.info(exc);
 		}
 		return validDate;
