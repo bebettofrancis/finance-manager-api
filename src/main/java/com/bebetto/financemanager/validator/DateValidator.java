@@ -29,7 +29,7 @@ public class DateValidator implements ConstraintValidator<DateConstraint, String
 		boolean validDate = false;
 		try {
 			final LocalDate localDate = LocalDate.parse(value, DateTimeFormatter.ofPattern(this.pattern));
-			LoggingManager.info("Expense date", localDate);
+			LoggingManager.info("Expense date: ", localDate);
 			if (!this.dateRangeValidate || (!localDate.isBefore(this.minDate) && !localDate.isAfter(this.maxDate))) {
 				validDate = true;
 			}

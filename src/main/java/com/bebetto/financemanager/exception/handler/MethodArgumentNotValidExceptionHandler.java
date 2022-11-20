@@ -14,7 +14,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 
 import com.bebetto.financemanager.logger.LoggingManager;
 import com.bebetto.financemanager.response.Response;
@@ -33,9 +32,8 @@ public class MethodArgumentNotValidExceptionHandler {
 	}
 
 	@ExceptionHandler(value = { MethodArgumentNotValidException.class })
-	public ResponseEntity<Response<Map<String, Object>>> handleException(final MethodArgumentNotValidException exc,
-			final WebRequest request) {
-		LoggingManager.warn(request, exc);
+	public ResponseEntity<Response<Map<String, Object>>> handleException(final MethodArgumentNotValidException exc) {
+		LoggingManager.warn(exc.getClass().getName(), exc);
 		final HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
 		final List<String> errors = getErrors(exc.getFieldErrors());
 		final String message = exc.getMessage();

@@ -1,13 +1,6 @@
 package com.bebetto.financemanager.filter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -19,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 
+import com.bebetto.financemanager.http.HttpRequestParser;
 import com.bebetto.financemanager.logger.LoggingManager;
 import com.bebetto.financemanager.utility.CommonUtility;
 
@@ -39,30 +33,17 @@ public class LoggingFilter implements Filter {
 		MDC.put("requestURI", requestUri);
 		MDC.put("requestMethod", requestMethod);
 		LoggingManager.info("Processing started...!");
-		LoggingManager.info(getRequestData(httpServletRequest));
+		final HttpRequestParser httpRequestParser = new HttpRequestParser(httpServletRequest);
+		LoggingManager.info(getRequestData(httpRequestParser));
 		chain.doFilter(request, response);
 		final long endTime = System.currentTimeMillis();
 		LoggingManager.info("Processing ended, Total time taken: " + (endTime - startTime) + " ms...!");
 		MDC.clear();
 	}
 
-	private String getHeaders(final HttpServletRequest httpServletRequest) {
+	private String getHeaders(final HttpRequestParser httpRequestParser) {
 		final StringBuilder headers = new StringBuilder(CommonUtility.padRightSpaces("Request Headers:", 25));
-		Map<String, List<String>> headersMap = null;
-		final Enumeration<String> headerNames = httpServletRequest.getHeaderNames();
-		while (headerNames.hasMoreElements()) {
-			if (headersMap == null) {
-				headersMap = new HashMap<>();
-			}
-			final String headerName = headerNames.nextElement();
-			headersMap.putIfAbsent(headerName, new ArrayList<>());
-			final List<String> headerValues = headersMap.get(headerName);
-			final Enumeration<String> headerValuesTmp = httpServletRequest.getHeaders(headerName);
-			while (headerValuesTmp.hasMoreElements()) {
-				headerValues.add(headerValuesTmp.nextElement());
-			}
-		}
-		headers.append(headersMap);
+		headers.append(httpRequestParser.getHeadersMap());
 		return headers.toString();
 	}
 
@@ -70,18 +51,16 @@ public class LoggingFilter implements Filter {
 		return httpServletRequest.getRemoteAddr();
 	}
 
-	private String getParameters(final HttpServletRequest httpServletRequest) {
+	private String getParameters(final HttpRequestParser httpRequestParser) {
 		final StringBuilder parameters = new StringBuilder(CommonUtility.padRightSpaces("Request Parameters:", 25));
-		final Map<String, String[]> parametersMap = httpServletRequest.getParameterMap();
-		parameters.append(parametersMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,
-				value -> Arrays.asList(value.getValue()), (k1, k2) -> k2, HashMap::new)));
+		parameters.append(httpRequestParser.getParametersMap());
 		return parameters.toString();
 	}
 
-	private String getRequestData(final HttpServletRequest httpServletRequest) {
+	private String getRequestData(final HttpRequestParser httpRequestParser) {
 		final StringBuilder requestData = new StringBuilder("\n##########REQUEST DATA START##########\n\n");
-		requestData.append(getHeaders(httpServletRequest)).append("\n\n");
-		requestData.append(getParameters(httpServletRequest)).append("\n\n");
+		requestData.append(getHeaders(httpRequestParser)).append("\n\n");
+		requestData.append(getParameters(httpRequestParser)).append("\n\n");
 		requestData.append("##########REQUEST DATA END  ##########");
 		return requestData.toString();
 	}

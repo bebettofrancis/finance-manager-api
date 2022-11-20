@@ -8,7 +8,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,10 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bebetto.financemanager.logger.LoggingManager;
 import com.bebetto.financemanager.pojo.Expense;
 import com.bebetto.financemanager.response.Response;
 import com.bebetto.financemanager.service.ExpensesService;
+import com.bebetto.financemanager.utility.DownloadUtility;
 
 @RestController
 @RequestMapping("/api")
@@ -40,7 +39,6 @@ public class ExpensesController {
 
 	@PostMapping(value = "/v1/expenses", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response<Map<String, Object>>> createExpense(@Valid @RequestBody final Expense expense) {
-		LoggingManager.info("#####RequestBody#####", expense);
 		final HttpStatus httpStatus = HttpStatus.CREATED;
 		final Map<String, Object> data = new HashMap<>();
 		data.put("expenseId", this.expensesService.createExpense(expense));
@@ -80,11 +78,7 @@ public class ExpensesController {
 	public ResponseEntity<ByteArrayResource> getExportedExpenses() throws IOException {
 		final HttpStatus httpStatus = HttpStatus.OK;
 		final ByteArrayResource byteArrayResource = this.expensesService.getExpensesToExport();
-		final HttpHeaders headers = new HttpHeaders();
-		headers.setContentDisposition(
-				ContentDisposition.attachment().filename(byteArrayResource.getFilename()).build());
-		headers.setContentType(MediaType.parseMediaType(MediaType.APPLICATION_OCTET_STREAM_VALUE));
-		headers.setContentLength(byteArrayResource.contentLength());
+		final HttpHeaders headers = DownloadUtility.getHttpHeadersForDownload(byteArrayResource);
 		return new ResponseEntity<>(byteArrayResource, headers, httpStatus);
 	}
 

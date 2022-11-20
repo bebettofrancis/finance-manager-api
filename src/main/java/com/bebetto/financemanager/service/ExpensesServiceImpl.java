@@ -3,6 +3,7 @@ package com.bebetto.financemanager.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -72,11 +73,8 @@ public class ExpensesServiceImpl implements ExpensesService {
 	@Override
 	@Transactional(rollbackFor = { Exception.class })
 	public Expense getExpense(final int expenseId) {
-		final Expense expense = this.expensesDao.getExpense(expenseId);
-		if (expense == null) {
-			throw new ExpenseNotFoundException(EXPENSE_NOT_FOUND);
-		}
-		return expense;
+		return Optional.ofNullable(this.expensesDao.getExpense(expenseId))
+				.orElseThrow(() -> new ExpenseNotFoundException(EXPENSE_NOT_FOUND));
 	}
 
 	@Override
