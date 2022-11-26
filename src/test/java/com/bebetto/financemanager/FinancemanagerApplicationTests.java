@@ -1,7 +1,6 @@
 package com.bebetto.financemanager;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,7 +21,7 @@ class FinancemanagerApplicationTests {
 
 	@Test
 	void contextLoads() {
-		assertThat(this.expensesController).isNotNull();
+		Assertions.assertThat(this.expensesController).isNotNull();
 	}
 
 }

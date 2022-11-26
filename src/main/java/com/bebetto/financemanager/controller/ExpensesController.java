@@ -74,7 +74,7 @@ public class ExpensesController {
 		return new ResponseEntity<>(response, httpStatus);
 	}
 
-	@GetMapping(value = "/v1/expenses/export", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/v1/expenses/export")
 	public ResponseEntity<ByteArrayResource> getExportedExpenses() throws IOException {
 		final HttpStatus httpStatus = HttpStatus.OK;
 		final ByteArrayResource byteArrayResource = this.expensesService.getExpensesToExport();
@@ -82,7 +82,7 @@ public class ExpensesController {
 		return new ResponseEntity<>(byteArrayResource, headers, httpStatus);
 	}
 
-	@PutMapping(value = "/v1/expenses", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/v1/expenses", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response<Map<String, Object>>> updateExpense(@RequestBody final Expense expense) {
 		final HttpStatus httpStatus = HttpStatus.NO_CONTENT;
 		this.expensesService.updateExpense(expense);
