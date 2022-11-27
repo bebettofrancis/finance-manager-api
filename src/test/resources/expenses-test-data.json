@@ -1,0 +1,83 @@
+{
+  "createExpense_Expense_HttpStatusCreated": {
+    "id": 1,
+    "categoryId": 3,
+    "comment": "test",
+    "date": "2022-09-03",
+    "amount": 567.34
+  },
+  "deleteExpense_ExpenseId_HttpStatusNoContent": {
+    "id": 1,
+    "categoryId": 3,
+    "comment": "test",
+    "date": "2022-09-03",
+    "amount": 567.34
+  },
+  "getExpense_ExpenseId_HttpStatusOk": {
+    "id": 1,
+    "categoryId": 3,
+    "comment": "test",
+    "date": "2022-09-03",
+    "amount": 567.34
+  },
+  "updateExpense_Expense_HttpStatusNotFound": {
+    "id": 1,
+    "categoryId": 3,
+    "comment": "test",
+    "date": "2022-09-03",
+    "amount": 567.34
+  },
+  "updateExpense_Expense_HttpStatusOk": {
+    "id": 1,
+    "categoryId": 3,
+    "comment": "test",
+    "date": "2022-09-03",
+    "amount": 567.34
+  },
+  "getExpenses_HttpGetRequest_HttpStatusOk": [
+    {
+      "id": 1,
+      "categoryId": 3,
+      "comment": "test 1",
+      "date": "2022-09-03",
+      "amount": 500
+    },
+    {
+      "id": 4,
+      "categoryId": 1,
+      "comment": "test 2",
+      "date": "2020-01-30",
+      "amount": 34324.3432
+    },
+    {
+      "id": 9,
+      "categoryId": 2,
+      "comment": "test 3",
+      "date": "2021-08-03",
+      "amount": 3
+    }
+  ],
+  "getExportedExpenses_HttpGetRequest_HttpStatusOk": [
+    {
+      "id": 1,
+      "categoryId": 3,
+      "comment": "test 1",
+      "date": "2022-09-03",
+      "amount": 500
+    },
+    {
+      "id": 4,
+      "categoryId": 1,
+      "comment": "test 2",
+      "date": "2020-01-30",
+      "amount": 34324.3432
+    },
+    {
+      "id": 9,
+      "categoryId": 2,
+      "comment": "test 3",
+      "date": "2021-08-03",
+      "amount": 3
+    }
+  ]
+}
