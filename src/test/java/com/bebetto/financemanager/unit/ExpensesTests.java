@@ -61,7 +61,6 @@ class ExpensesTests {
 	@Test
 	void deleteExpense_ExpenseId_HttpStatusNoContent() throws Exception {
 		final Expense expense = this.expensesTestsData.deleteExpense_ExpenseId_HttpStatusNoContent();
-		Mockito.when(this.expensesDao.getExpense(any(Integer.class))).thenReturn(expense);
 		Mockito.when(this.expensesDao.deleteExpense(any(Integer.class))).thenReturn(true);
 		this.mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/expenses/{expenseId}", expense.getId()))
 				.andDo(MockMvcResultHandlers.print())
@@ -70,8 +69,7 @@ class ExpensesTests {
 
 	@Test
 	void deleteExpense_ExpenseId_HttpStatusNotFound() throws Exception {
-		final Expense expense = this.expensesTestsData.deleteExpense_ExpenseId_HttpStatusNotFound();
-		Mockito.when(this.expensesDao.getExpense(any(Integer.class))).thenReturn(expense);
+		Mockito.when(this.expensesDao.deleteExpense(any(Integer.class))).thenReturn(false);
 		this.mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/expenses/{expenseId}", 1))
 				.andDo(MockMvcResultHandlers.print())
 				.andExpect(MockMvcResultMatchers.status().is(HttpStatus.NOT_FOUND.value()))
@@ -135,9 +133,20 @@ class ExpensesTests {
 	}
 
 	@Test
+	void updateExpense_Expense_HttpStatusNoContent() throws Exception {
+		final Expense expense = this.expensesTestsData.updateExpense_Expense_HttpStatusOk();
+		Mockito.when(this.expensesDao.updateExpense(any(Expense.class))).thenReturn(true);
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.put("/api/v1/expenses")
+						.content(this.objectMapper.writeValueAsString(expense)).contentType(MediaType.APPLICATION_JSON))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(MockMvcResultMatchers.status().is(HttpStatus.NO_CONTENT.value()));
+	}
+
+	@Test
 	void updateExpense_Expense_HttpStatusNotFound() throws Exception {
 		final Expense expense = this.expensesTestsData.updateExpense_Expense_HttpStatusNotFound();
-		Mockito.when(this.expensesDao.getExpense(any(Integer.class))).thenReturn(null);
+		Mockito.when(this.expensesDao.updateExpense(any(Expense.class))).thenReturn(false);
 		this.mockMvc
 				.perform(MockMvcRequestBuilders.put("/api/v1/expenses")
 						.content(this.objectMapper.writeValueAsString(expense)).contentType(MediaType.APPLICATION_JSON))
@@ -145,18 +154,6 @@ class ExpensesTests {
 				.andExpect(MockMvcResultMatchers.status().is(HttpStatus.NOT_FOUND.value()))
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("Expense not found")));
-	}
-
-	@Test
-	void updateExpense_Expense_HttpStatusOk() throws Exception {
-		final Expense expense = this.expensesTestsData.updateExpense_Expense_HttpStatusOk();
-		Mockito.when(this.expensesDao.getExpense(any(Integer.class))).thenReturn(expense);
-		Mockito.when(this.expensesDao.updateExpense(any(Expense.class))).thenReturn(true);
-		this.mockMvc
-				.perform(MockMvcRequestBuilders.put("/api/v1/expenses")
-						.content(this.objectMapper.writeValueAsString(expense)).contentType(MediaType.APPLICATION_JSON))
-				.andDo(MockMvcResultHandlers.print())
-				.andExpect(MockMvcResultMatchers.status().is(HttpStatus.NO_CONTENT.value()));
 	}
 
 }

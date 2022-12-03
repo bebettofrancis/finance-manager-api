@@ -37,7 +37,7 @@ public class ExpensesServiceImpl implements ExpensesService {
 		return this.expensesDao.createExpense(expense);
 	}
 
-	public void createExpensesSheet(final Workbook workbook, final List<Expense> expenses) {
+	private void createExpensesSheet(final Workbook workbook, final List<Expense> expenses) {
 		final Sheet sheet = workbook.createSheet("Expenses");
 		final Row headerRow = sheet.createRow(0);
 		headerRow.createCell(0).setCellValue("Sr. no");
@@ -63,11 +63,9 @@ public class ExpensesServiceImpl implements ExpensesService {
 	@Override
 	@Transactional(rollbackFor = { Exception.class })
 	public void deleteExpense(final int expenseId) {
-		final Expense expense = this.expensesDao.getExpense(expenseId);
-		if (expense == null) {
+		if (!this.expensesDao.deleteExpense(expenseId)) {
 			throw new ExpenseNotFoundException(EXPENSE_NOT_FOUND);
 		}
-		this.expensesDao.deleteExpense(expenseId);
 	}
 
 	@Override
@@ -104,11 +102,9 @@ public class ExpensesServiceImpl implements ExpensesService {
 	@Override
 	@Transactional(rollbackFor = { Exception.class })
 	public void updateExpense(final Expense expense) {
-		final Expense expenseTmp = this.expensesDao.getExpense(expense.getId());
-		if (expenseTmp == null) {
+		if (!this.expensesDao.updateExpense(expense)) {
 			throw new ExpenseNotFoundException(EXPENSE_NOT_FOUND);
 		}
-		this.expensesDao.updateExpense(expense);
 	}
 
 }

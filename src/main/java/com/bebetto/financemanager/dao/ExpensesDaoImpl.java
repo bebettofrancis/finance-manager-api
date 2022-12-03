@@ -21,11 +21,11 @@ public class ExpensesDaoImpl implements ExpensesDao {
 
 	private static final String INSERT_EXPENSE = "INSERT INTO EXPENSE (CATEGORY_ID,COMMENT,AMOUNT,EXPENSE_DATE) VALUES\n"
 			+ "(:categoryId,:comment,:amount,:expenseDate)";
-	private static final String GET_EXPENSE = "SELECT ID,CATEGORY_ID,COMMENT,AMOUNT,EXPENSE_DATE FROM EXPENSE WHERE ID=:expenseId";
 	private static final String GET_EXPENSES = "SELECT ID,CATEGORY_ID,COMMENT,AMOUNT,EXPENSE_DATE FROM EXPENSE";
+	private static final String GET_EXPENSE = GET_EXPENSES + " WHERE ID=:expenseId";
 	private static final String DELETE_EXPENSE = "DELETE FROM EXPENSE WHERE ID=:expenseId";
-	private static final String UPDATE_EXPENSE = "UPDATE EXPENSE SET CATEGORY_ID=:categoryId,COMMENT=:comment\n"
-			+ "WHERE ID=:expenseId";
+	private static final String UPDATE_EXPENSE = "UPDATE EXPENSE SET CATEGORY_ID=:categoryId,COMMENT=:comment,\n"
+			+ "AMOUNT=:amount,EXPENSE_DATE=:expenseDate WHERE ID=:expenseId";
 	private static final String EXPENSE_ID = "expenseId";
 
 	private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -94,9 +94,9 @@ public class ExpensesDaoImpl implements ExpensesDao {
 
 	@Override
 	public boolean updateExpense(final Expense expense) {
-		final SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+		final SqlParameterSource sqlParameterSource = new MapSqlParameterSource().addValue(EXPENSE_ID, expense.getId())
 				.addValue("categoryId", expense.getCategoryId()).addValue("comment", expense.getComment())
-				.addValue(EXPENSE_ID, expense.getId());
+				.addValue("amount", expense.getAmount()).addValue("expenseDate", expense.getDate());
 		final int updatedRows = this.namedParameterJdbcTemplate.update(UPDATE_EXPENSE, sqlParameterSource);
 		return updatedRows > 0;
 	}

@@ -1,0 +1,14 @@
+{
+  "sheets": [
+    {
+      "name": "Expenses",
+      "headers": [
+        { "name": "Sr. no" },
+        { "name": "Category" },
+        { "name": "Comment" },
+        { "name": "Expense date" },
+        { "name": "Amount" }
+      ]
+    }
+  ]
+}

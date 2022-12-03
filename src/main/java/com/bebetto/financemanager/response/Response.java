@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+
 public class Response<T> {
 
 	public static class ResponseBuilder<T> {
@@ -82,7 +84,7 @@ public class Response<T> {
 
 	public static final String DEFAULT_ERROR_MESSAGE = "Something went wrong...!";
 	public static final String DEFAULT_SUCCESS_MESSAGE = "Request processed successfully...!";
-	public static final int DEFAULT_STATUS_CODE = 202;
+	public static final int DEFAULT_STATUS_CODE = HttpStatus.ACCEPTED.value();
 
 	private int status;
 	private String message;
