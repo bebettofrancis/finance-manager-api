@@ -2,6 +2,7 @@ package com.bebetto.financemanager.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -12,8 +13,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -27,6 +30,7 @@ import com.bebetto.financemanager.response.Response;
 import com.bebetto.financemanager.service.ExpensesService;
 import com.bebetto.financemanager.utility.DownloadUtility;
 
+@CrossOrigin
 @RequestMapping("/api")
 @RestController
 public class ExpensesController {
@@ -47,6 +51,14 @@ public class ExpensesController {
 		final Response<Map<String, Object>> response = new Response.ResponseBuilder<Map<String, Object>>()
 				.setStatus(httpStatus.value()).setMessage(Response.DEFAULT_SUCCESS_MESSAGE).setData(data).build();
 		return new ResponseEntity<>(response, httpStatus);
+	}
+
+	@PatchMapping(value = "/v1/expenses", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Response<Map<String, Object>>> deleteCreateUpdateExpenses(
+			@RequestBody final Map<String, List<Expense>> expenses) {
+		final HttpStatus httpStatus = HttpStatus.NO_CONTENT;
+		LoggingManager.info(expenses);
+		return new ResponseEntity<>(httpStatus);
 	}
 
 	@DeleteMapping(value = "/v1/expenses/{expenseId}", produces = MediaType.APPLICATION_JSON_VALUE)

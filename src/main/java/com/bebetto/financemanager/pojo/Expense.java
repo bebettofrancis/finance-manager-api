@@ -75,8 +75,8 @@ public class Expense {
 
 	@Override
 	public String toString() {
-		return "Expense [getCategoryId()=" + getCategoryId() + ", getComment()=" + getComment() + ", getId()=" + getId()
-				+ "]";
+		return "Expense [getAmount()=" + getAmount() + ", getCategoryId()=" + getCategoryId() + ", getComment()="
+				+ getComment() + ", getDate()=" + getDate() + ", getId()=" + getId() + "]";
 	}
 
 }
