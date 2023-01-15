@@ -38,10 +38,6 @@ public class ExpensesTestsData {
 		return this.objectMapper.treeToValue(expenseJsonNode, Expense.class);
 	}
 
-	public Expense deleteExpense_ExpenseId_HttpStatusNotFound() {
-		return null;
-	}
-
 	public Expense getExpense_ExpenseId_HttpStatusNotFound() {
 		return null;
 	}

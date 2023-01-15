@@ -3,7 +3,7 @@
     "id": 1,
     "categoryId": 3,
     "comment": "test",
-    "date": "2022-09-03",
+    "date": "2023-01-03",
     "amount": 567.34
   },
   "deleteExpense_ExpenseId_HttpStatusNoContent": {

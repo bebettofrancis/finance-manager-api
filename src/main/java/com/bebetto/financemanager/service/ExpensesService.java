@@ -2,6 +2,7 @@ package com.bebetto.financemanager.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.core.io.ByteArrayResource;
 
@@ -10,6 +11,8 @@ import com.bebetto.financemanager.pojo.Expense;
 public interface ExpensesService {
 
 	int createExpense(final Expense expense);
+
+	Map<String, List<Integer>> deleteCreateUpdateExpenses(final Map<String, List<Expense>> expenses);
 
 	void deleteExpense(final int expenseId);
 

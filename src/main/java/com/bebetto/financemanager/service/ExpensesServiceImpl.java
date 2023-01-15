@@ -2,7 +2,10 @@ package com.bebetto.financemanager.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.poi.ss.usermodel.Row;
@@ -39,25 +42,57 @@ public class ExpensesServiceImpl implements ExpensesService {
 
 	private void createExpensesSheet(final Workbook workbook, final List<Expense> expenses) {
 		final Sheet sheet = workbook.createSheet("Expenses");
+		createExpensesSheetHeaderRow(sheet);
+		if (CommonUtility.isEmpty(expenses)) {
+			return;
+		}
+		int dataRow = 1;
+		for (final Expense expense : expenses) {
+			createExpensesSheetBodyRow(sheet, expense, dataRow);
+			++dataRow;
+		}
+	}
+
+	private void createExpensesSheetBodyRow(final Sheet sheet, final Expense expense, final int index) {
+		final Row row = sheet.createRow(index);
+		row.createCell(0).setCellValue(index);
+		row.createCell(1).setCellValue(expense.getCategoryId());
+		row.createCell(2).setCellValue(expense.getComment());
+		row.createCell(3).setCellValue(expense.getDate());
+		row.createCell(4).setCellValue(expense.getAmount().toString());
+	}
+
+	private void createExpensesSheetHeaderRow(final Sheet sheet) {
 		final Row headerRow = sheet.createRow(0);
 		headerRow.createCell(0).setCellValue("Sr. no");
 		headerRow.createCell(1).setCellValue("Category");
 		headerRow.createCell(2).setCellValue("Comment");
 		headerRow.createCell(3).setCellValue("Expense date");
 		headerRow.createCell(4).setCellValue("Amount");
+	}
+
+	@Override
+	@Transactional(rollbackFor = { Exception.class })
+	public Map<String, List<Integer>> deleteCreateUpdateExpenses(final Map<String, List<Expense>> expenses) {
 		if (CommonUtility.isEmpty(expenses)) {
-			return;
+			return Collections.emptyMap();
 		}
-		int dataRow = 1;
-		for (final Expense expense : expenses) {
-			final Row row = sheet.createRow(dataRow);
-			row.createCell(0).setCellValue(dataRow);
-			row.createCell(1).setCellValue(expense.getCategoryId());
-			row.createCell(2).setCellValue(expense.getComment());
-			row.createCell(3).setCellValue(expense.getDate());
-			row.createCell(4).setCellValue(expense.getAmount().toString());
-			++dataRow;
+		final Map<String, List<Integer>> deletedUpdatedCreatedExpenses = new HashMap<>();
+		final List<Expense> toBeDeletedExpenses = expenses.get("delete");
+		if (!CommonUtility.isEmpty(toBeDeletedExpenses)) {
+			final List<Integer> deletedExpenses = this.expensesDao.deleteExpenses(toBeDeletedExpenses);
+			deletedUpdatedCreatedExpenses.put("not-deleted", deletedExpenses);
 		}
+		final List<Expense> toBeUpdatedExpenses = expenses.get("update");
+		if (!CommonUtility.isEmpty(toBeUpdatedExpenses)) {
+			final List<Integer> updatedExpenses = this.expensesDao.updateExpenses(toBeUpdatedExpenses);
+			deletedUpdatedCreatedExpenses.put("not-updated", updatedExpenses);
+		}
+		final List<Expense> toBeCreatedExpenses = expenses.get("create");
+		if (!CommonUtility.isEmpty(toBeCreatedExpenses)) {
+			this.expensesDao.createExpenses(toBeCreatedExpenses);
+		}
+		return deletedUpdatedCreatedExpenses;
 	}
 
 	@Override

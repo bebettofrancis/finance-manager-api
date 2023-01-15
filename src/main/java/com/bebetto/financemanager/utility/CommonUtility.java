@@ -1,6 +1,7 @@
 package com.bebetto.financemanager.utility;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -12,6 +13,10 @@ public class CommonUtility {
 
 	public static boolean isEmpty(final Collection<?> collection) {
 		return Objects.isNull(collection) || collection.isEmpty();
+	}
+
+	public static boolean isEmpty(final Map<?, ?> map) {
+		return Objects.isNull(map) || map.isEmpty();
 	}
 
 	public static String padRightSpaces(final String value, final int length) {

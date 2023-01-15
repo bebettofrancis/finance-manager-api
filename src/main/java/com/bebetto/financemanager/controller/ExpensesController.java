@@ -56,9 +56,15 @@ public class ExpensesController {
 	@PatchMapping(value = "/v1/expenses", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response<Map<String, Object>>> deleteCreateUpdateExpenses(
 			@RequestBody final Map<String, List<Expense>> expenses) {
-		final HttpStatus httpStatus = HttpStatus.NO_CONTENT;
-		LoggingManager.info(expenses);
-		return new ResponseEntity<>(httpStatus);
+		LoggingManager.info("Request body: ", expenses);
+		final HttpStatus httpStatus = HttpStatus.OK;
+		final Map<String, List<Integer>> deletedUpdatedCreatedExpenses = this.expensesService
+				.deleteCreateUpdateExpenses(expenses);
+		final Map<String, Object> data = new HashMap<>();
+		data.put("expenses", deletedUpdatedCreatedExpenses);
+		final Response<Map<String, Object>> response = new Response.ResponseBuilder<Map<String, Object>>()
+				.setStatus(httpStatus.value()).setMessage(Response.DEFAULT_SUCCESS_MESSAGE).setData(data).build();
+		return new ResponseEntity<>(response, httpStatus);
 	}
 
 	@DeleteMapping(value = "/v1/expenses/{expenseId}", produces = MediaType.APPLICATION_JSON_VALUE)

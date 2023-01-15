@@ -14,6 +14,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import com.bebetto.financemanager.logger.LoggingManager;
 import com.bebetto.financemanager.pojo.Expense;
 
 @Repository
@@ -46,10 +47,36 @@ public class ExpensesDaoImpl implements ExpensesDao {
 	}
 
 	@Override
+	public void createExpenses(final List<Expense> expenses) {
+		final SqlParameterSource[] sqlParameterSource = expenses.stream()
+				.map(expense -> new MapSqlParameterSource().addValue("categoryId", expense.getCategoryId())
+						.addValue("comment", expense.getComment()).addValue("amount", expense.getAmount())
+						.addValue("expenseDate", expense.getDate()))
+				.toArray(MapSqlParameterSource[]::new);
+		this.namedParameterJdbcTemplate.batchUpdate(INSERT_EXPENSE, sqlParameterSource);
+	}
+
+	@Override
 	public boolean deleteExpense(final int expenseId) {
 		final SqlParameterSource sqlParameterSource = new MapSqlParameterSource().addValue(EXPENSE_ID, expenseId);
 		final int deletedRows = this.namedParameterJdbcTemplate.update(DELETE_EXPENSE, sqlParameterSource);
 		return deletedRows > 0;
+	}
+
+	@Override
+	public List<Integer> deleteExpenses(final List<Expense> expenses) {
+		final SqlParameterSource[] sqlParameterSource = expenses.stream()
+				.map(expense -> new MapSqlParameterSource().addValue(EXPENSE_ID, expense.getId()))
+				.toArray(MapSqlParameterSource[]::new);
+		final int[] deletedExpenses = this.namedParameterJdbcTemplate.batchUpdate(DELETE_EXPENSE, sqlParameterSource);
+		final List<Integer> notDeletedExpenses = new ArrayList<>();
+		for (int i = 0, j = deletedExpenses.length; i < j; ++i) {
+			if (deletedExpenses[i] == 0) {
+				notDeletedExpenses.add(expenses.get(i).getId());
+			}
+		}
+		LoggingManager.warn("Not deleted expense ids: " + notDeletedExpenses);
+		return notDeletedExpenses;
 	}
 
 	private Expense generateExpenseFromResultSet(final ResultSet rs) throws SQLException {
@@ -99,6 +126,24 @@ public class ExpensesDaoImpl implements ExpensesDao {
 				.addValue("amount", expense.getAmount()).addValue("expenseDate", expense.getDate());
 		final int updatedRows = this.namedParameterJdbcTemplate.update(UPDATE_EXPENSE, sqlParameterSource);
 		return updatedRows > 0;
+	}
+
+	@Override
+	public List<Integer> updateExpenses(final List<Expense> expenses) {
+		final SqlParameterSource[] sqlParameterSource = expenses.stream()
+				.map(expense -> new MapSqlParameterSource().addValue(EXPENSE_ID, expense.getId())
+						.addValue("categoryId", expense.getCategoryId()).addValue("comment", expense.getComment())
+						.addValue("amount", expense.getAmount()).addValue("expenseDate", expense.getDate()))
+				.toArray(MapSqlParameterSource[]::new);
+		final int[] updatedExpenses = this.namedParameterJdbcTemplate.batchUpdate(UPDATE_EXPENSE, sqlParameterSource);
+		final List<Integer> notUpdatedExpenses = new ArrayList<>();
+		for (int i = 0, j = updatedExpenses.length; i < j; ++i) {
+			if (updatedExpenses[i] == 0) {
+				notUpdatedExpenses.add(expenses.get(i).getId());
+			}
+		}
+		LoggingManager.warn("Not updated expense ids: " + notUpdatedExpenses);
+		return notUpdatedExpenses;
 	}
 
 }
