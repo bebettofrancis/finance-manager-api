@@ -1,11 +1,17 @@
 package com.bebetto.financemanager.utility;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
 public class CommonUtility {
+
+	public static String getCurrentDateTimeString() {
+		return LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+	}
 
 	public static String getUniqueId() {
 		return UUID.randomUUID().toString();
@@ -20,6 +26,7 @@ public class CommonUtility {
 	}
 
 	public static String padRightSpaces(final String value, final int length) {
+		Objects.requireNonNull(value);
 		if (value.length() > length) {
 			return value;
 		}

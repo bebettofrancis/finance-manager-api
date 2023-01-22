@@ -20,13 +20,13 @@ public class Expense {
 	@Min(0)
 	private int categoryId;
 
-	@Size(max = 200, message = "Field length cannot be greater tha 200 characters...!")
+	@Size(max = 200, message = "'comment' cannot have more than 200 characters...!")
 	private String comment;
 
 	@DateConstraint(pattern = VALID_DATE_FORMAT, dateRangeValidate = true, minDate = 100L, maxDate = 100L)
 	private String date;
 
-	@NotNull(message = "Amount cannot be null...")
+	@NotNull(message = "'amount' cannot be null...!")
 	private BigDecimal amount;
 
 	public Expense() {

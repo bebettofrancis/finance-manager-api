@@ -77,22 +77,22 @@ public class ExpensesServiceImpl implements ExpensesService {
 		if (CommonUtility.isEmpty(expenses)) {
 			return Collections.emptyMap();
 		}
-		final Map<String, List<Integer>> deletedUpdatedCreatedExpenses = new HashMap<>();
+		final Map<String, List<Integer>> nonDeletedUpdatedExpenses = new HashMap<>();
 		final List<Expense> toBeDeletedExpenses = expenses.get("delete");
 		if (!CommonUtility.isEmpty(toBeDeletedExpenses)) {
 			final List<Integer> deletedExpenses = this.expensesDao.deleteExpenses(toBeDeletedExpenses);
-			deletedUpdatedCreatedExpenses.put("not-deleted", deletedExpenses);
+			nonDeletedUpdatedExpenses.put("not-deleted", deletedExpenses);
 		}
 		final List<Expense> toBeUpdatedExpenses = expenses.get("update");
 		if (!CommonUtility.isEmpty(toBeUpdatedExpenses)) {
 			final List<Integer> updatedExpenses = this.expensesDao.updateExpenses(toBeUpdatedExpenses);
-			deletedUpdatedCreatedExpenses.put("not-updated", updatedExpenses);
+			nonDeletedUpdatedExpenses.put("not-updated", updatedExpenses);
 		}
 		final List<Expense> toBeCreatedExpenses = expenses.get("create");
 		if (!CommonUtility.isEmpty(toBeCreatedExpenses)) {
 			this.expensesDao.createExpenses(toBeCreatedExpenses);
 		}
-		return deletedUpdatedCreatedExpenses;
+		return nonDeletedUpdatedExpenses;
 	}
 
 	@Override

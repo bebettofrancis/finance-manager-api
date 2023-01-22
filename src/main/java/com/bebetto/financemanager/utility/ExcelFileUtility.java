@@ -1,7 +1,5 @@
 package com.bebetto.financemanager.utility;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -35,7 +33,7 @@ public class ExcelFileUtility {
 
 		public String getFileName() {
 			if (this.fileName == null) {
-				this.fileName = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+				this.fileName = CommonUtility.getCurrentDateTimeString();
 			}
 			return this.fileName + "." + getExcelType().getExtension();
 		}
