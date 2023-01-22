@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 
 import com.bebetto.financemanager.validator.DateConstraint;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Expense {
@@ -18,6 +19,7 @@ public class Expense {
 	private int id;
 
 	@Min(0)
+	@JsonProperty("category-id")
 	private int categoryId;
 
 	@Size(max = 200, message = "'comment' cannot have more than 200 characters...!")
