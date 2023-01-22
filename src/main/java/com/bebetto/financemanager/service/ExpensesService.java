@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.core.io.ByteArrayResource;
 
 import com.bebetto.financemanager.pojo.Expense;
+import com.bebetto.financemanager.pojo.ExpenseCategory;
 
 public interface ExpensesService {
 
@@ -17,6 +18,8 @@ public interface ExpensesService {
 	void deleteExpense(final int expenseId);
 
 	Expense getExpense(final int expenseId);
+
+	List<ExpenseCategory> getExpenseCategories();
 
 	List<Expense> getExpenses();
 

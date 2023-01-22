@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.bebetto.financemanager.logger.LoggingManager;
 import com.bebetto.financemanager.pojo.Expense;
+import com.bebetto.financemanager.pojo.ExpenseCategory;
 
 @Repository
 public class ExpensesDaoImpl implements ExpensesDao {
@@ -29,6 +30,7 @@ public class ExpensesDaoImpl implements ExpensesDao {
 	private static final String INSERT_EXPENSE = "INSERT INTO EXPENSE (CATEGORY_ID,COMMENT,AMOUNT,EXPENSE_DATE) VALUES\n" //
 			+ "(:" + CATEGORY_ID_PARAM + ",:" + COMMENT_PARAM + ",:" + AMOUNT_PARAM + ",:" + EXPENSE_DATE_PARAM + ")";
 	private static final String GET_EXPENSES = "SELECT ID,CATEGORY_ID,COMMENT,AMOUNT,EXPENSE_DATE FROM EXPENSE";
+	private static final String GET_EXPENSE_CATEGORIES = "SELECT ID,NAME FROM EXPENSE_CATEGORY";
 	private static final String GET_EXPENSE = GET_EXPENSES + " WHERE ID=:" + EXPENSE_ID_PARAM;
 	private static final String DELETE_EXPENSE = "DELETE FROM EXPENSE WHERE ID=:" + EXPENSE_ID_PARAM;
 	private static final String UPDATE_EXPENSE = "UPDATE EXPENSE SET CATEGORY_ID=:" + CATEGORY_ID_PARAM + ",\n" //
@@ -84,6 +86,13 @@ public class ExpensesDaoImpl implements ExpensesDao {
 		return notDeletedExpenses;
 	}
 
+	private ExpenseCategory generateExpenseCategoryFromResultSet(final ResultSet rs) throws SQLException {
+		final ExpenseCategory expenseCategory = new ExpenseCategory();
+		expenseCategory.setId(rs.getInt("ID"));
+		expenseCategory.setName(rs.getString("NAME"));
+		return expenseCategory;
+	}
+
 	private Expense generateExpenseFromResultSet(final ResultSet rs) throws SQLException {
 		final Expense expense = new Expense();
 		expense.setId(rs.getInt("ID"));
@@ -106,6 +115,22 @@ public class ExpensesDaoImpl implements ExpensesDao {
 						}
 					}
 					return expense;
+				});
+	}
+
+	@Override
+	public List<ExpenseCategory> getExpenseCategories() {
+		return this.namedParameterJdbcTemplate.query(GET_EXPENSE_CATEGORIES,
+				(ResultSetExtractor<List<ExpenseCategory>>) rs -> {
+					List<ExpenseCategory> expenseCategories = null;
+					while (rs.next()) {
+						if (expenseCategories == null) {
+							expenseCategories = new ArrayList<>();
+						}
+						final ExpenseCategory expenseCategory = generateExpenseCategoryFromResultSet(rs);
+						expenseCategories.add(expenseCategory);
+					}
+					return expenseCategories;
 				});
 	}
 

@@ -3,6 +3,7 @@ package com.bebetto.financemanager.dao;
 import java.util.List;
 
 import com.bebetto.financemanager.pojo.Expense;
+import com.bebetto.financemanager.pojo.ExpenseCategory;
 
 public interface ExpensesDao {
 
@@ -15,6 +16,8 @@ public interface ExpensesDao {
 	List<Integer> deleteExpenses(final List<Expense> expenses);
 
 	Expense getExpense(final int expenseId);
+
+	List<ExpenseCategory> getExpenseCategories();
 
 	List<Expense> getExpenses();
 

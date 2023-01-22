@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bebetto.financemanager.dao.ExpensesDao;
 import com.bebetto.financemanager.exception.ExpenseNotFoundException;
 import com.bebetto.financemanager.pojo.Expense;
+import com.bebetto.financemanager.pojo.ExpenseCategory;
 import com.bebetto.financemanager.utility.CommonUtility;
 import com.bebetto.financemanager.utility.ExcelFileUtility;
 
@@ -108,6 +109,12 @@ public class ExpensesServiceImpl implements ExpensesService {
 	public Expense getExpense(final int expenseId) {
 		return Optional.ofNullable(this.expensesDao.getExpense(expenseId))
 				.orElseThrow(() -> new ExpenseNotFoundException(EXPENSE_NOT_FOUND));
+	}
+
+	@Override
+	@Transactional(rollbackFor = { Exception.class })
+	public List<ExpenseCategory> getExpenseCategories() {
+		return this.expensesDao.getExpenseCategories();
 	}
 
 	@Override

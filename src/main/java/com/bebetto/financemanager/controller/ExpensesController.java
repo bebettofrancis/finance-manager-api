@@ -94,6 +94,16 @@ public class ExpensesController {
 		return new ResponseEntity<>(response, httpStatus);
 	}
 
+	@GetMapping(value = "/v1/expenses/metadata", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Response<Map<String, Object>>> getExpensesMetadata() {
+		final HttpStatus httpStatus = HttpStatus.OK;
+		final Map<String, Object> data = new HashMap<>();
+		data.put("categories", this.expensesService.getExpenseCategories());
+		final Response<Map<String, Object>> response = new Response.ResponseBuilder<Map<String, Object>>()
+				.setStatus(httpStatus.value()).setMessage(Response.DEFAULT_SUCCESS_MESSAGE).setData(data).build();
+		return new ResponseEntity<>(response, httpStatus);
+	}
+
 	@GetMapping(value = "/v1/expenses/export")
 	public ResponseEntity<ByteArrayResource> getExportedExpenses() throws IOException {
 		final HttpStatus httpStatus = HttpStatus.OK;
