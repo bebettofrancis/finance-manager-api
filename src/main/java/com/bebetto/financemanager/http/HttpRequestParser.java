@@ -39,8 +39,8 @@ public class HttpRequestParser {
 
 	public Map<String, List<String>> getParametersMap() {
 		if (this.parametersMap == null) {
-			this.parametersMap = this.httpServletRequest.getParameterMap().entrySet().stream().collect(
-					Collectors.toMap(Map.Entry::getKey, value -> Arrays.asList(value.getValue()), null, HashMap::new));
+			this.parametersMap = this.httpServletRequest.getParameterMap().entrySet().stream().collect(Collectors
+					.toMap(Map.Entry::getKey, value -> Arrays.asList(value.getValue()), (k1, k2) -> k2, HashMap::new));
 		}
 		return this.parametersMap;
 	}
