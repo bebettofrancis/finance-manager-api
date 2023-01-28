@@ -14,9 +14,10 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import com.bebetto.financemanager.expense.Expense;
+import com.bebetto.financemanager.expense.ExpenseCategory;
 import com.bebetto.financemanager.logger.LoggingManager;
-import com.bebetto.financemanager.pojo.Expense;
-import com.bebetto.financemanager.pojo.ExpenseCategory;
+import com.bebetto.financemanager.utility.CommonUtility;
 
 @Repository
 public class ExpensesDaoImpl implements ExpensesDao {
@@ -82,7 +83,9 @@ public class ExpensesDaoImpl implements ExpensesDao {
 				notDeletedExpenses.add(expenses.get(i).getId());
 			}
 		}
-		LoggingManager.warn("Not deleted expense ids: " + notDeletedExpenses);
+		if (!CommonUtility.isEmpty(notDeletedExpenses)) {
+			LoggingManager.warn("Not deleted expense ids: " + notDeletedExpenses);
+		}
 		return notDeletedExpenses;
 	}
 
@@ -179,7 +182,9 @@ public class ExpensesDaoImpl implements ExpensesDao {
 				notUpdatedExpenses.add(expenses.get(i).getId());
 			}
 		}
-		LoggingManager.warn("Not updated expense ids: " + notUpdatedExpenses);
+		if (!CommonUtility.isEmpty(notUpdatedExpenses)) {
+			LoggingManager.warn("Not updated expense ids: " + notUpdatedExpenses);
+		}
 		return notUpdatedExpenses;
 	}
 

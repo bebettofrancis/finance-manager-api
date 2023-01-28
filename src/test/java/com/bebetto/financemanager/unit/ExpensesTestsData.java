@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.bebetto.financemanager.pojo.Expense;
+import com.bebetto.financemanager.expense.Expense;
 import com.bebetto.financemanager.property.ExpensesTestDataLoader;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

@@ -1,4 +1,4 @@
-package com.bebetto.financemanager.pojo;
+package com.bebetto.financemanager.expense;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

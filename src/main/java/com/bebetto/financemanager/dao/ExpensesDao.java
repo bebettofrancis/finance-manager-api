@@ -2,8 +2,8 @@ package com.bebetto.financemanager.dao;
 
 import java.util.List;
 
-import com.bebetto.financemanager.pojo.Expense;
-import com.bebetto.financemanager.pojo.ExpenseCategory;
+import com.bebetto.financemanager.expense.Expense;
+import com.bebetto.financemanager.expense.ExpenseCategory;
 
 public interface ExpensesDao {
 

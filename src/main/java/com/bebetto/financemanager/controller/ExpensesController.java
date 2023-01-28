@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bebetto.financemanager.expense.Expense;
 import com.bebetto.financemanager.logger.LoggingManager;
-import com.bebetto.financemanager.pojo.Expense;
 import com.bebetto.financemanager.response.Response;
 import com.bebetto.financemanager.service.ExpensesService;
 import com.bebetto.financemanager.utility.DownloadUtility;

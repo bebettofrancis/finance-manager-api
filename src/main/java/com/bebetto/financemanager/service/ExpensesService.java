@@ -6,8 +6,8 @@ import java.util.Map;
 
 import org.springframework.core.io.ByteArrayResource;
 
-import com.bebetto.financemanager.pojo.Expense;
-import com.bebetto.financemanager.pojo.ExpenseCategory;
+import com.bebetto.financemanager.expense.Expense;
+import com.bebetto.financemanager.expense.ExpenseCategory;
 
 public interface ExpensesService {
 

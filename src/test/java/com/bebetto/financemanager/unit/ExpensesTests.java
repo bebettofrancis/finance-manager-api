@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.bebetto.financemanager.dao.ExpensesDao;
-import com.bebetto.financemanager.pojo.Expense;
+import com.bebetto.financemanager.expense.Expense;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
